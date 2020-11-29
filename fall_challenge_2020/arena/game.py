@@ -20,6 +20,7 @@ class Game():
         self.round = 0
         self.deck = Deck()
         self.bonus = [4, 4]
+        self.bonus_value = [3, 1]
 
         random.shuffle(self.deck.tome)
         random.shuffle(self.deck.deliveries)
@@ -43,12 +44,23 @@ class Game():
         self.player2 = Player(proc2)
 
     def get_bonus_value(self, spell):
-        return 1
-        pass
+        if self.get_bonus_amount(spell) == 0:
+            return 0
 
-    def get_number_bonus(self, spell):
-        return 0
-        pass
+        index = self.deliveries.index(spell)
+
+        if index < 0 or index > 1:
+            return 0
+
+        return self.bonus_value[index]
+
+    def get_bonus_amount(self, spell):
+        index = self.deliveries.index(spell)
+
+        if index < 0 or index > 1:
+            return 0
+
+        return self.bonus[index]
 
     def generate_msg(self, player, other_player):
         # Amount
@@ -58,7 +70,7 @@ class Game():
         for d in self.deliveries:
             msg.append("{action_id} {action_type} {deltas} {price} {tome_index} {tax_count} {castable} {repeatable}".format(
                        action_id=d.id, action_type=SpellType.BREW.name, deltas=d.inventory.to_string(), price=d.score,
-                       tome_index=self.get_bonus_value(d), tax_count=self.get_number_bonus(d), castable=int(d.active),
+                       tome_index=self.get_bonus_value(d), tax_count=self.get_bonus_amount(d), castable=int(d.active),
                        repeatable=int(d.repeatable)))
 
         # Spells and tomes
