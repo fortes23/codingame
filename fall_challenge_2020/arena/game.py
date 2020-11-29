@@ -40,8 +40,8 @@ class Game():
                                  stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
 
-        self.player1 = Player(proc1)
-        self.player2 = Player(proc2)
+        self.player1 = Player(proc1, debug=debug)
+        self.player2 = Player(proc2, debug=debug)
 
     def get_bonus_value(self, spell):
         if self.get_bonus_amount(spell) == 0:
@@ -64,7 +64,7 @@ class Game():
 
     def generate_msg(self, player, other_player):
         # Amount
-        msg = [len(self.deliveries) + len(self.tome) + len(player.spells) + len(other_player.spells)]
+        msg = [str(len(self.deliveries) + len(self.tome) + len(player.spells) + len(other_player.spells))]
 
         # Deliveries
         for d in self.deliveries:
@@ -96,4 +96,12 @@ class Game():
 
     def match(self):
         while self.round < MAX_ROUNDS:
+            messages = self.generate_msg(self.player1, self.player2)
+            for msg in messages:
+                self.player1.send_input_line(msg)
+
+            messages = self.generate_msg(self.player2, self.player1)
+            for msg in messages:
+                self.player2.send_input_line(msg)
+
             return
