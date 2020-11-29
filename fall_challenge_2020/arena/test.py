@@ -1,6 +1,8 @@
+import os
+import subprocess
+
 from game import Game
 
-g = Game(["/bin/sh"], ["/bin/sh"])
-a = g.generate_msg(g.player1, g.player2)
-print(len(a))
-print(a)
+bot = os.path.dirname(os.path.abspath(__file__)) + "/test_player.py"
+g = Game([bot], [bot], debug=True)
+g.match()
