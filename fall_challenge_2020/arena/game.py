@@ -56,25 +56,26 @@ class Game():
 
         # Deliveries
         for d in self.deliveries:
-            msg.append("{} {} {} {} {} {} {} {}".format(
-                       d.id, SpellType.BREW.name, d.inventory.to_string(), d.score, self.get_bonus_value(d), 
-                       self.get_number_bonus(d), int(d.active), int(d.repeatable)))
+            msg.append("{action_id} {action_type} {deltas} {price} {tome_index} {tax_count} {castable} {repeatable}".format(
+                       action_id=d.id, action_type=SpellType.BREW.name, deltas=d.inventory.to_string(), price=d.score,
+                       tome_index=self.get_bonus_value(d), tax_count=self.get_number_bonus(d), castable=int(d.active),
+                       repeatable=int(d.repeatable)))
 
         # Spells and tomes
         for t in self.tome:
-            msg.append("{} {} {} {} {} {} {} {}".format(
-                       t.id, SpellType.LEARN.name, t.inventory.to_string(), t.score,
-                       self.tome.index(t), t.stock, int(t.active), int(t.repeatable)))
+            msg.append("{action_id} {action_type} {deltas} {price} {tome_index} {tax_count} {castable} {repeatable}".format(
+                       action_id=t.id, action_type=SpellType.LEARN.name, deltas=t.inventory.to_string(), price=t.score,
+                       tome_index=self.tome.index(t), tax_count=t.stock, castable=int(t.active), repeatable=int(t.repeatable)))
 
         for s in player.spells:
-            msg.append("{} {} {} {} {} {} {} {}".format(
-                       s.id, SpellType.CAST.name, s.inventory.to_string(), s.score,
-                       player.spells.index(s), s.stock, int(s.active), int(s.repeatable)))
+            msg.append("{action_id} {action_type} {deltas} {price} {tome_index} {tax_count} {castable} {repeatable}".format(
+                       action_id=s.id, action_type=SpellType.CAST.name, deltas=s.inventory.to_string(), price=s.score,
+                       tome_index=player.spells.index(s), tax_count=s.stock, castable=int(s.active), repeatable=int(s.repeatable)))
 
         for s in other_player.spells:
-            msg.append("{} {} {} {} {} {} {} {}".format(
-                       s.id, SpellType.OPPONENT_CAST.name, s.inventory.to_string(), s.score,
-                       other_player.spells.index(s), s.stock, int(s.active), int(s.repeatable)))
+            msg.append("{action_id} {action_type} {deltas} {price} {tome_index} {tax_count} {castable} {repeatable}".format(
+                       action_id=s.id, action_type=SpellType.OPPONENT_CAST.name, deltas=s.inventory.to_string(), price=s.score,
+                       tome_index=other_player.spells.index(s), tax_count=s.stock, castable=int(s.active), repeatable=int(s.repeatable)))
 
         # Inventory and scores
         msg.append("{} {}".format(player.inventory.to_string(), player.score))
